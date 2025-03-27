@@ -1,0 +1,296 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User Model
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String
+  avatar        String?
+  role          UserRole  @default(STUDENT)
+  age           Int?
+  country       String?
+  language      String?
+  password      String
+  emailVerified Boolean   @default(false)
+  lastLogin     DateTime?
+  phoneNo       String?
+  refreshToken  String?
+
+  careerProfile      CareerProfile?
+  learningPaths      LearningPath[]
+  skillProfiles      SkillProfile[]
+  achievements       Achievement[]
+  progressTrackers   ProgressTracker[]
+  mentorships        Mentorship[]
+  applicationProfile ApplicationProfile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Career Profile Model
+model CareerProfile {
+  id                      String          @id @default(cuid())
+  user                    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                  String          @unique
+  currentCareerGoal       String?
+  desiredIndustry         String?
+  educationLevel          EducationLevel?
+  skillAreas              String[]
+  careerAssessmentResults Json?
+  recommendedCareers      String[]
+  skillGapAnalysis        Json?
+}
+
+// Learning Path Model
+model LearningPath {
+  id                String             @id @default(cuid())
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  title             String
+  description       String?
+  targetCareer      String
+  estimatedDuration Int                @default(90)
+  milestones        Milestone[]
+  resources         Resource[]
+  status            LearningPathStatus @default(NOT_STARTED)
+  startDate         DateTime           @default(now())
+  expectedEndDate   DateTime?
+}
+
+// Milestone Model
+model Milestone {
+  id                   String       @id @default(cuid())
+  learningPath         LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  learningPathId       String
+  title                String
+  description          String?
+  orderIndex           Int
+  isCompleted          Boolean      @default(false)
+  completedAt          DateTime?
+  requiredSkills       String[]
+  recommendedResources Resource[]
+}
+
+// Skill Profile Model
+model SkillProfile {
+  id               String          @id @default(cuid())
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  technicalSkills  SkillItem[]     @relation("TechnicalSkills")
+  softSkills       SkillItem[]     @relation("SoftSkills")
+  languageSkills   LanguageSkill[]
+  proficiencyScore Float           @default(0)
+  lastUpdated      DateTime        @default(now())
+}
+
+// Skill Item Model
+model SkillItem {
+  id                      String        @id @default(cuid())
+  name                    String
+  category                SkillCategory
+  level                   SkillLevel    @default(BEGINNER)
+  certifications          String[]
+  technicalSkills         SkillProfile? @relation("TechnicalSkills", fields: [technicalSkillProfileId], references: [id])
+  technicalSkillProfileId String?
+  softSkills              SkillProfile? @relation("SoftSkills", fields: [softSkillProfileId], references: [id])
+  softSkillProfileId      String?
+}
+
+// Resource Model
+model Resource {
+  id            String             @id @default(cuid())
+  title         String
+  type          ResourceType
+  url           String?
+  platform      String?
+  difficulty    ResourceDifficulty @default(BEGINNER)
+  tags          String[]
+  milestones    Milestone[]
+  learningPaths LearningPath[]
+}
+
+// Progress Tracker Model
+model ProgressTracker {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String
+  dailyGoals       Json?
+  weeklyObjectives Json?
+  monthlyTargets   Json?
+  studyHours       Float    @default(0)
+  completedModules Int      @default(0)
+  lastTracked      DateTime @default(now())
+}
+
+// Achievement Model
+model Achievement {
+  id          String          @id @default(cuid())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  title       String
+  description String
+  type        AchievementType
+  points      Int             @default(0)
+  earnedAt    DateTime        @default(now())
+}
+
+// Mentor Profile Model
+model MentorProfile {
+  id             String       @id @default(cuid())
+  userId         String       @unique
+  profession     String
+  industry       String
+  expertise      String[]
+  mentorships    Mentorship[]
+  availableSlots Int          @default(5)
+}
+
+// Mentorship Model
+model Mentorship {
+  id           String           @id @default(cuid())
+  mentee       User             @relation(fields: [menteeId], references: [id], onDelete: Cascade)
+  menteeId     String
+  mentor       MentorProfile    @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  mentorId     String
+  status       MentorshipStatus @default(PENDING)
+  startDate    DateTime?
+  endDate      DateTime?
+  sessionNotes Json?
+  feedback     String?
+}
+
+// Application Profile Model
+model ApplicationProfile {
+  id              String                @id @default(cuid())
+  user            User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String                @unique
+  resumeUrl       String?
+  coverLetterUrl  String?
+  jobApplications JobApplication[]
+  interviewPrep   InterviewPreparation?
+}
+
+// Job Application Model
+model JobApplication {
+  id                   String             @id @default(cuid())
+  applicationProfile   ApplicationProfile @relation(fields: [applicationProfileId], references: [id], onDelete: Cascade)
+  applicationProfileId String
+  companyName          String
+  jobTitle             String
+  applicationDate      DateTime           @default(now())
+  status               ApplicationStatus  @default(APPLIED)
+}
+
+// Interview Preparation Model
+model InterviewPreparation {
+  id                   String             @id @default(cuid())
+  applicationProfile   ApplicationProfile @relation(fields: [applicationProfileId], references: [id], onDelete: Cascade)
+  applicationProfileId String             @unique
+  mockInterviewScores  Json?
+  strengths            String[]
+  improvements         String[]
+}
+
+// Language Skill Model
+model LanguageSkill {
+  id             String              @id @default(cuid())
+  name           String
+  proficiency    LanguageProficiency @default(BASIC)
+  skillProfile   SkillProfile        @relation(fields: [skillProfileId], references: [id], onDelete: Cascade)
+  skillProfileId String
+}
+
+// Enums remain the same as in the previous schema
+enum UserRole {
+  STUDENT
+  MENTOR
+  ADMIN
+  EDUCATOR
+}
+
+enum EducationLevel {
+  HIGH_SCHOOL
+  UNDERGRADUATE
+  GRADUATE
+  POSTGRADUATE
+}
+
+enum LearningPathStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+}
+
+enum SkillCategory {
+  TECHNICAL
+  SOFT_SKILL
+  LANGUAGE
+  PROFESSIONAL
+}
+
+enum SkillLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum ResourceType {
+  VIDEO
+  COURSE
+  ARTICLE
+  BOOK
+  TUTORIAL
+  CERTIFICATION
+}
+
+enum ResourceDifficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum AchievementType {
+  SKILL_MILESTONE
+  LEARNING_PATH
+  COMMUNITY_CONTRIBUTION
+  CAREER_PROGRESS
+}
+
+enum MentorshipStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ApplicationStatus {
+  APPLIED
+  INTERVIEWED
+  OFFERED
+  REJECTED
+  ACCEPTED
+}
+
+enum LanguageProficiency {
+  BASIC
+  CONVERSATIONAL
+  PROFESSIONAL
+  NATIVE
+}
