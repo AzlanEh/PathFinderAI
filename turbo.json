@@ -1,6 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "NODE_ENV",
+    "NEXTAUTH_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

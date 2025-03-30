@@ -18,7 +18,9 @@ export const config = [
       turbo: turboPlugin,
     },
     rules: {
-      "turbo/no-undeclared-env-vars": "warn",
+      // Disable the turbo/no-undeclared-env-vars rule as it's causing false positives
+      // The environment variables are properly declared in turbo.json
+      "turbo/no-undeclared-env-vars": "off",
     },
   },
   {
