@@ -4,23 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index",
-    "build": "tsc -p .",
-    "dev": "tsc-watch --onSuccess \"node dist/index\""
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "dev:direct": "nodemon --ignore node_modules/ src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^22.13.10",
+    "nodemon": "^3.1.9",
     "tsc-watch": "^6.2.1",
     "typescript": "5.8.2"
   },
   "dependencies": {
     "@repo/db": "*",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "^15.2.1"
   }
 }

@@ -1,16 +1,19 @@
 // import prisma from "../../db/prismaDB.js";
 import client from "@repo/db/client";
-import { asyncHandler } from "@utils/asyncHandler";
-import { ApiError } from "@utils/ApiError";
-import { ApiResponse } from "@utils/ApiResponse";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import bcrypt from "bcryptjs";
 import Jwt from "jsonwebtoken";
 
 const createUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  console.log(req.body);
+  const { email, password, username } = req.body;
 
-  console.log(email, password);
+  // Validate input
+  if (!email || !password || !username) {
+    throw new ApiError(400, "Email, password, and username are required");
+  }
+
   const existedUser = await client.user.findUnique({
     where: {
       email: email,
@@ -26,6 +29,7 @@ const createUser = asyncHandler(async (req, res) => {
   const newUser = await client.user.create({
     data: {
       email: email,
+      username: username,
       password: hashPassword,
       provider: "manual",
     },
