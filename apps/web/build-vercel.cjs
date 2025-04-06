@@ -193,7 +193,7 @@ module.exports.default = function(req, res) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PathFinderAI - Keep Learning, On Track</title>
+  <title>Knowster - Keep Learning, On Track</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -201,36 +201,54 @@ module.exports.default = function(req, res) {
       padding: 0;
       background-color: #0a0f18;
       color: #ffffff;
+      overflow-x: hidden;
     }
+
+    /* Navbar styles */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: rgba(10, 15, 24, 0.8);
-      backdrop-filter: blur(10px);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
+      position: relative;
+      z-index: 50;
+      width: 100%;
     }
+
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-    .nav-links a {
-      color: #ffffff;
+      background-color: #e3e3e3;
+      color: #35425a;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 500;
       text-decoration: none;
     }
+
+    .nav-menu {
+      background-color: #e3e3e3;
+      border-radius: 9999px;
+      padding: 0.5rem 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: #0a0f18;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.75;
+    }
+
     .auth-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
     }
+
     .auth-button {
       background-color: #e3e3e3;
       color: #0a0f18;
@@ -239,29 +257,49 @@ module.exports.default = function(req, res) {
       text-decoration: none;
       font-weight: 500;
     }
-    .hero {
+
+    .auth-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Hero section styles */
+    .hero-section {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      height: 70vh;
+      margin-top: 2rem;
       text-align: center;
-      padding: 0 2rem;
+      padding: 0 1rem;
+      position: relative;
     }
-    .hero h1 {
+
+    .hero-content {
+      position: relative;
+      z-index: 20;
+    }
+
+    .hero-title {
       font-size: 4rem;
+      font-weight: bold;
       margin-bottom: 1rem;
-      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      background: linear-gradient(to bottom, #ffffff, #707070);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
     }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin-bottom: 2rem;
-      color: #cccccc;
+
+    .hero-description {
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+      color: #aaaaaa;
+      font-size: 1.125rem;
+      line-height: 1.5;
     }
+
     .cta-button {
       display: inline-block;
       background-color: #e3e3e3;
@@ -270,32 +308,75 @@ module.exports.default = function(req, res) {
       border-radius: 9999px;
       text-decoration: none;
       font-weight: 500;
-      transition: background-color 0.2s;
+      position: relative;
+      z-index: 40;
     }
+
     .cta-button:hover {
-      background-color: #ffffff;
+      background-color: rgba(227, 227, 227, 0.9);
+    }
+
+    /* Background effects */
+    .background-beams {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      overflow: hidden;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-description {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">PathFinderAI</div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/courses">Courses</a>
-      <a href="/resources">Resources</a>
+  <div class="navbar">
+    <!-- Logo -->
+    <a href="/" class="logo">Knowster</a>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/resources">Resources</a>
+      </nav>
     </div>
+
+    <!-- Auth Buttons -->
     <div class="auth-buttons">
       <a href="/sign-in" class="auth-button">Sign In</a>
       <a href="/sign-up" class="auth-button">Join Now</a>
     </div>
-  </nav>
+  </div>
 
-  <section class="hero">
-    <h1>Keep Learning,<br />On Track.</h1>
-    <p>Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning</p>
-    <a href="/courses" class="cta-button">Get Started</a>
-  </section>
+  <div class="hero-section">
+    <div class="background-beams"></div>
+
+    <div class="hero-content">
+      <h2 class="hero-title">Keep Learning,<br />On Track.</h2>
+      <p class="hero-description">
+        Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning
+      </p>
+
+      <div>
+        <a href="/courses" class="cta-button">Get Started</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>\`);
 };
@@ -469,7 +550,7 @@ module.exports = server;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PathFinderAI - Keep Learning, On Track</title>
+  <title>Knowster - Keep Learning, On Track</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -477,36 +558,54 @@ module.exports = server;
       padding: 0;
       background-color: #0a0f18;
       color: #ffffff;
+      overflow-x: hidden;
     }
+
+    /* Navbar styles */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background-color: rgba(10, 15, 24, 0.8);
-      backdrop-filter: blur(10px);
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
+      position: relative;
+      z-index: 50;
+      width: 100%;
     }
+
     .logo {
-      font-weight: bold;
-      font-size: 1.5rem;
-    }
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-    }
-    .nav-links a {
-      color: #ffffff;
+      background-color: #e3e3e3;
+      color: #35425a;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 500;
       text-decoration: none;
     }
+
+    .nav-menu {
+      background-color: #e3e3e3;
+      border-radius: 9999px;
+      padding: 0.5rem 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: #0a0f18;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.75;
+    }
+
     .auth-buttons {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
     }
+
     .auth-button {
       background-color: #e3e3e3;
       color: #0a0f18;
@@ -515,29 +614,49 @@ module.exports = server;
       text-decoration: none;
       font-weight: 500;
     }
-    .hero {
+
+    .auth-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Hero section styles */
+    .hero-section {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      height: 70vh;
+      margin-top: 2rem;
       text-align: center;
-      padding: 0 2rem;
+      padding: 0 1rem;
+      position: relative;
     }
-    .hero h1 {
+
+    .hero-content {
+      position: relative;
+      z-index: 20;
+    }
+
+    .hero-title {
       font-size: 4rem;
+      font-weight: bold;
       margin-bottom: 1rem;
-      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      background: linear-gradient(to bottom, #ffffff, #707070);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
     }
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin-bottom: 2rem;
-      color: #cccccc;
+
+    .hero-description {
+      max-width: 36rem;
+      margin: 0 auto 2rem;
+      color: #aaaaaa;
+      font-size: 1.125rem;
+      line-height: 1.5;
     }
+
     .cta-button {
       display: inline-block;
       background-color: #e3e3e3;
@@ -546,32 +665,75 @@ module.exports = server;
       border-radius: 9999px;
       text-decoration: none;
       font-weight: 500;
-      transition: background-color 0.2s;
+      position: relative;
+      z-index: 40;
     }
+
     .cta-button:hover {
-      background-color: #ffffff;
+      background-color: rgba(227, 227, 227, 0.9);
+    }
+
+    /* Background effects */
+    .background-beams {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      overflow: hidden;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-description {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">PathFinderAI</div>
-    <div class="nav-links">
-      <a href="/">Home</a>
-      <a href="/courses">Courses</a>
-      <a href="/resources">Resources</a>
+  <div class="navbar">
+    <!-- Logo -->
+    <a href="/" class="logo">Knowster</a>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/courses">Courses</a>
+        <a href="/resources">Resources</a>
+      </nav>
     </div>
+
+    <!-- Auth Buttons -->
     <div class="auth-buttons">
       <a href="/sign-in" class="auth-button">Sign In</a>
       <a href="/sign-up" class="auth-button">Join Now</a>
     </div>
-  </nav>
+  </div>
 
-  <section class="hero">
-    <h1>Keep Learning,<br />On Track.</h1>
-    <p>Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning</p>
-    <a href="/courses" class="cta-button">Get Started</a>
-  </section>
+  <div class="hero-section">
+    <div class="background-beams"></div>
+
+    <div class="hero-content">
+      <h2 class="hero-title">Keep Learning,<br />On Track.</h2>
+      <p class="hero-description">
+        Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning
+      </p>
+
+      <div>
+        <a href="/courses" class="cta-button">Get Started</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 `;
