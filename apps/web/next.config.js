@@ -18,6 +18,9 @@ const nextConfig = {
   },
   transpilePackages: ["@repo/ui"],
   output: "standalone",
+  images: {
+    domains: ["assets.aceternity.com"],
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
