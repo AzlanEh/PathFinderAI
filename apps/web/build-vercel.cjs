@@ -185,6 +185,27 @@ try {
   const indexPagePath = path.join(indexPageDir, "index.js");
   fs.writeFileSync(indexPagePath, "module.exports = {props: {}};");
 
+  // Create serverless pages directory
+  const serverlessPagesDir = path.join(nextDir, "serverless", "pages");
+  if (!fs.existsSync(serverlessPagesDir)) {
+    fs.mkdirSync(serverlessPagesDir, { recursive: true });
+  }
+
+  // Create a minimal serverless index page
+  const serverlessIndexPagePath = path.join(serverlessPagesDir, "index.js");
+  fs.writeFileSync(serverlessIndexPagePath, "module.exports = {props: {}};");
+
+  // Create a minimal serverless _app page
+  const serverlessAppPagePath = path.join(serverlessPagesDir, "_app.js");
+  fs.writeFileSync(serverlessAppPagePath, "module.exports = {props: {}};");
+
+  // Create a minimal serverless _document page
+  const serverlessDocumentPagePath = path.join(
+    serverlessPagesDir,
+    "_document.js"
+  );
+  fs.writeFileSync(serverlessDocumentPagePath, "module.exports = {props: {}};");
+
   // Create required directories for static files
   const staticDir = path.join(nextDir, "static");
   if (!fs.existsSync(staticDir)) {
@@ -262,8 +283,21 @@ try {
   const pagesManifestPath = path.join(nextDir, "server", "pages-manifest.json");
   const pagesManifest = {
     "/": "pages/index.js",
+    "/_app": "pages/_app.js",
+    "/_document": "pages/_document.js",
   };
   fs.writeFileSync(pagesManifestPath, JSON.stringify(pagesManifest, null, 2));
+
+  // Create required serverless/pages-manifest.json
+  const serverlessPagesManifestPath = path.join(
+    nextDir,
+    "serverless",
+    "pages-manifest.json"
+  );
+  fs.writeFileSync(
+    serverlessPagesManifestPath,
+    JSON.stringify(pagesManifest, null, 2)
+  );
 
   // Create required react-loadable-manifest.json
   const reactLoadableManifestPath = path.join(
