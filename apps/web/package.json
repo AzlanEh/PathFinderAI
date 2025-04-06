@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "next build",
+    "build": "node build-vercel.js",
+    "build:next": "next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"
@@ -39,10 +40,10 @@
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22.14.0",
-    "@types/react": "19.0.10",
+    "@types/react": "^19.0.10",
     "@types/react-dom": "19.0.4",
     "eslint": "^9.24.0",
-    "typescript": "5.8.2"
+    "typescript": "^5.8.2"
   },
   "resolutions": {
     "@types/node": "^22.14.0",
