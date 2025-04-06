@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd packages/db && npx prisma generate && cd ../../apps/web && node build-vercel.cjs",
+  "buildCommand": "cd packages/db && npx prisma generate && cd ../../apps/web && npm install --no-save typescript@5.8.2 @types/react@19.0.10 @types/node@22.14.0 && npm run build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next",
