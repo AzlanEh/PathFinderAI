@@ -153,6 +153,11 @@ try {
     routes: {},
     dynamicRoutes: {},
     notFoundRoutes: [],
+    preview: {
+      previewModeId: "previewModeId",
+      previewModeSigningKey: "previewModeSigningKey",
+      previewModeEncryptionKey: "previewModeEncryptionKey",
+    },
   };
   fs.writeFileSync(
     prerenderManifestPath,
@@ -186,5 +191,87 @@ try {
     fs.mkdirSync(staticDir);
   }
 
+  // Create required chunks directory
+  const chunksDir = path.join(nextDir, "chunks");
+  if (!fs.existsSync(chunksDir)) {
+    fs.mkdirSync(chunksDir);
+  }
+
+  // Create required server/chunks directory
+  const serverChunksDir = path.join(nextDir, "server", "chunks");
+  if (!fs.existsSync(serverChunksDir)) {
+    fs.mkdirSync(serverChunksDir, { recursive: true });
+  }
+
+  // Create required server/app directory
+  const serverAppDir = path.join(nextDir, "server", "app");
+  if (!fs.existsSync(serverAppDir)) {
+    fs.mkdirSync(serverAppDir, { recursive: true });
+  }
+
+  // Create a minimal app page
+  const appPagePath = path.join(serverAppDir, "page.js");
+  fs.writeFileSync(appPagePath, "module.exports = {props: {}};");
+
+  // Create required server/edge-chunks directory
+  const serverEdgeChunksDir = path.join(nextDir, "server", "edge-chunks");
+  if (!fs.existsSync(serverEdgeChunksDir)) {
+    fs.mkdirSync(serverEdgeChunksDir, { recursive: true });
+  }
+
+  // Create required server/middleware directory
+  const serverMiddlewareDir = path.join(nextDir, "server", "middleware");
+  if (!fs.existsSync(serverMiddlewareDir)) {
+    fs.mkdirSync(serverMiddlewareDir, { recursive: true });
+  }
+
+  // Create required server/middleware-manifest.json
+  const middlewareManifestPath = path.join(
+    nextDir,
+    "server",
+    "middleware-manifest.json"
+  );
+  const middlewareManifest = {
+    version: 2,
+    sortedMiddleware: [],
+    middleware: {},
+    functions: {},
+    matchers: {},
+  };
+  fs.writeFileSync(
+    middlewareManifestPath,
+    JSON.stringify(middlewareManifest, null, 2)
+  );
+
+  // Create required server/app-paths-manifest.json
+  const appPathsManifestPath = path.join(
+    nextDir,
+    "server",
+    "app-paths-manifest.json"
+  );
+  const appPathsManifest = {
+    pageFiles: {},
+    appFiles: {},
+  };
+  fs.writeFileSync(
+    appPathsManifestPath,
+    JSON.stringify(appPathsManifest, null, 2)
+  );
+
+  // Create required server/pages-manifest.json
+  const pagesManifestPath = path.join(nextDir, "server", "pages-manifest.json");
+  const pagesManifest = {
+    "/": "pages/index.js",
+  };
+  fs.writeFileSync(pagesManifestPath, JSON.stringify(pagesManifest, null, 2));
+
+  // Create required react-loadable-manifest.json
+  const reactLoadableManifestPath = path.join(
+    nextDir,
+    "react-loadable-manifest.json"
+  );
+  fs.writeFileSync(reactLoadableManifestPath, "{}");
+
+  console.log("Created all required files for Vercel deployment");
   process.exit(0); // Exit with success code to allow deployment to continue
 }
