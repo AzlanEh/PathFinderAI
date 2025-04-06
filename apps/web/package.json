@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "npm install --no-save typescript@5.8.2 @types/react@19.0.10 @types/node@22.14.0 && next build",
+    "build": "NODE_OPTIONS='--max_old_space_size=4096' next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"

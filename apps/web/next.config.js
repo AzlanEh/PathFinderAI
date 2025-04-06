@@ -15,9 +15,6 @@ const nextConfig = {
     // Warning: This allows production builds to successfully complete even if
     // your project has type errors.
     ignoreBuildErrors: true,
-    tsconfigPath: "./tsconfig.json",
-    // Completely disable TypeScript during production builds
-    typescript: false,
   },
   transpilePackages: ["@repo/ui"],
   output: "standalone",
