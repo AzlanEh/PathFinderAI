@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const nextConfig = {
   eslint: {
     // Warning: This allows production builds to successfully complete even if
@@ -15,10 +21,10 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@": require("node:path").resolve(__dirname, "./"),
+      "@": resolve(__dirname, "./"),
     };
     return config;
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
