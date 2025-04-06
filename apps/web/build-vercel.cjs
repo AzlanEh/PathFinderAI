@@ -188,7 +188,116 @@ try {
 module.exports.default = function(req, res) {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/html');
-  res.end('<html><body><h1>PathFinderAI</h1><p>Welcome to PathFinderAI. The application is currently being set up.</p></body></html>');
+  res.end(\`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PathFinderAI - Keep Learning, On Track</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #0a0f18;
+      color: #ffffff;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(10, 15, 24, 0.8);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .auth-button {
+      background-color: #e3e3e3;
+      color: #0a0f18;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 0 2rem;
+    }
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      color: #cccccc;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #e3e3e3;
+      color: #0a0f18;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    .cta-button:hover {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">PathFinderAI</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/courses">Courses</a>
+      <a href="/resources">Resources</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="/sign-in" class="auth-button">Sign In</a>
+      <a href="/sign-up" class="auth-button">Join Now</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Keep Learning,<br />On Track.</h1>
+    <p>Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning</p>
+    <a href="/courses" class="cta-button">Get Started</a>
+  </section>
+</body>
+</html>\`);
 };
 
 // Also export props for Next.js
@@ -352,7 +461,7 @@ module.exports = server;
 `;
   fs.writeFileSync(launcherPath, launcherContent);
 
-  // Create a simple index.html file
+  // Create a simple index.html file that matches the landing page design
   const indexHtmlPath = path.join(nextDir, "index.html");
   const indexHtmlContent = `
 <!DOCTYPE html>
@@ -360,34 +469,76 @@ module.exports = server;
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PathFinderAI</title>
+  <title>PathFinderAI - Keep Learning, On Track</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
       background-color: #0a0f18;
       color: #ffffff;
     }
-    .container {
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: rgba(10, 15, 24, 0.8);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+    }
+    .nav-links a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .auth-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .auth-button {
+      background-color: #e3e3e3;
+      color: #0a0f18;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       text-align: center;
-      padding: 2rem;
-      max-width: 800px;
+      padding: 0 2rem;
     }
-    h1 {
-      font-size: 2.5rem;
+    .hero h1 {
+      font-size: 4rem;
       margin-bottom: 1rem;
+      background: linear-gradient(to bottom, #ffffff, #a0a0a0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-    p {
+    .hero p {
       font-size: 1.2rem;
+      max-width: 600px;
       margin-bottom: 2rem;
       color: #cccccc;
     }
-    .button {
+    .cta-button {
       display: inline-block;
       background-color: #e3e3e3;
       color: #0a0f18;
@@ -397,17 +548,30 @@ module.exports = server;
       font-weight: 500;
       transition: background-color 0.2s;
     }
-    .button:hover {
+    .cta-button:hover {
       background-color: #ffffff;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>PathFinderAI</h1>
-    <p>Welcome to PathFinderAI. The application is currently being set up.</p>
-    <a href="/" class="button">Refresh</a>
-  </div>
+  <nav class="navbar">
+    <div class="logo">PathFinderAI</div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/courses">Courses</a>
+      <a href="/resources">Resources</a>
+    </div>
+    <div class="auth-buttons">
+      <a href="/sign-in" class="auth-button">Sign In</a>
+      <a href="/sign-up" class="auth-button">Join Now</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <h1>Keep Learning,<br />On Track.</h1>
+    <p>Elevate your management skills with our cutting-edge courses. Join Our Courses for Comprehensive Learning</p>
+    <a href="/courses" class="cta-button">Get Started</a>
+  </section>
 </body>
 </html>
 `;
