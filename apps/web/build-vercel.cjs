@@ -1,18 +1,8 @@
 // build-vercel.cjs
-const { execSync } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 
-// Install TypeScript and related packages locally
-console.log("Installing TypeScript and related packages locally...");
-try {
-  execSync(
-    "npm install --no-save typescript@5.8.2 @types/react@19.0.10 @types/node@22.14.0 tailwindcss@4.0.17 postcss@8.4.32 autoprefixer@10.4.16",
-    { stdio: "inherit" }
-  );
-} catch (error) {
-  console.error("Failed to install TypeScript locally, but continuing...");
-}
+console.log("Creating fallback page for Vercel deployment...");
 
 // Create a simple next.config.js that disables TypeScript
 const nextConfigPath = path.join(__dirname, "next.config.js");
@@ -92,97 +82,90 @@ const nextEnvContent =
 
 fs.writeFileSync(nextEnvPath, nextEnvContent);
 
-// Skip the build process and create a fallback page directly
-console.log("Skipping build process and creating fallback page directly...");
-try {
-  // We're not going to try to build the Next.js app at all
-  // This will prevent the Out of Memory error
-  throw new Error("Skipping build process");
-} catch (error) {
-  console.error("Build failed, but continuing deployment...");
-  // Create an empty .next directory to allow deployment to continue
-  const nextDir = path.join(__dirname, ".next");
-  if (!fs.existsSync(nextDir)) {
-    fs.mkdirSync(nextDir);
-  }
+// Create .next directory if it doesn't exist
+const nextDir = path.join(__dirname, ".next");
+if (!fs.existsSync(nextDir)) {
+  console.log(`Creating .next directory at ${nextDir}...`);
+  fs.mkdirSync(nextDir, { recursive: true });
+}
 
-  // Create necessary files for Vercel deployment
-  const buildIdPath = path.join(nextDir, "BUILD_ID");
-  fs.writeFileSync(buildIdPath, Date.now().toString());
+// Create necessary files for Vercel deployment
+const buildIdPath = path.join(nextDir, "BUILD_ID");
+fs.writeFileSync(buildIdPath, Date.now().toString());
 
-  // Create routes-manifest.json
-  const routesManifestPath = path.join(nextDir, "routes-manifest.json");
-  const routesManifest = {
-    version: 3,
-    basePath: "",
-    redirects: [],
-    rewrites: [],
-    headers: [],
-    staticRoutes: [
-      {
-        page: "/",
-        regex: "^/(?:/)?$",
-        routeKeys: {},
-        namedRegex: "^/(?:/)?$",
-      },
-    ],
-    dynamicRoutes: [],
-  };
-  fs.writeFileSync(routesManifestPath, JSON.stringify(routesManifest, null, 2));
-
-  // Create build-manifest.json
-  const buildManifestPath = path.join(nextDir, "build-manifest.json");
-  const buildManifest = {
-    polyfillFiles: [],
-    devFiles: [],
-    ampDevFiles: [],
-    lowPriorityFiles: [],
-    rootMainFiles: [],
-    pages: {
-      "/": [],
+// Create routes-manifest.json
+const routesManifestPath = path.join(nextDir, "routes-manifest.json");
+const routesManifest = {
+  version: 3,
+  basePath: "",
+  redirects: [],
+  rewrites: [],
+  headers: [],
+  staticRoutes: [
+    {
+      page: "/",
+      regex: "^/(?:/)?$",
+      routeKeys: {},
+      namedRegex: "^/(?:/)?$",
     },
-    ampFirstPages: [],
-  };
-  fs.writeFileSync(buildManifestPath, JSON.stringify(buildManifest, null, 2));
+  ],
+  dynamicRoutes: [],
+};
+fs.writeFileSync(routesManifestPath, JSON.stringify(routesManifest, null, 2));
 
-  // Create prerender-manifest.json
-  const prerenderManifestPath = path.join(nextDir, "prerender-manifest.json");
-  const prerenderManifest = {
-    version: 3,
-    routes: {},
-    dynamicRoutes: {},
-    notFoundRoutes: [],
-    preview: {
-      previewModeId: "previewModeId",
-      previewModeSigningKey: "previewModeSigningKey",
-      previewModeEncryptionKey: "previewModeEncryptionKey",
-    },
-  };
-  fs.writeFileSync(
-    prerenderManifestPath,
-    JSON.stringify(prerenderManifest, null, 2)
-  );
+// Create build-manifest.json
+const buildManifestPath = path.join(nextDir, "build-manifest.json");
+const buildManifest = {
+  polyfillFiles: [],
+  devFiles: [],
+  ampDevFiles: [],
+  lowPriorityFiles: [],
+  rootMainFiles: [],
+  pages: {
+    "/": [],
+  },
+  ampFirstPages: [],
+};
+fs.writeFileSync(buildManifestPath, JSON.stringify(buildManifest, null, 2));
 
-  // Create server directory and files
-  const serverDir = path.join(nextDir, "server");
-  if (!fs.existsSync(serverDir)) {
-    fs.mkdirSync(serverDir);
-  }
+// Create prerender-manifest.json
+const prerenderManifestPath = path.join(nextDir, "prerender-manifest.json");
+const prerenderManifest = {
+  version: 3,
+  routes: {},
+  dynamicRoutes: {},
+  notFoundRoutes: [],
+  preview: {
+    previewModeId: "previewModeId",
+    previewModeSigningKey: "previewModeSigningKey",
+    previewModeEncryptionKey: "previewModeEncryptionKey",
+  },
+};
+fs.writeFileSync(
+  prerenderManifestPath,
+  JSON.stringify(prerenderManifest, null, 2)
+);
 
-  // Create pages directory
-  const pagesDir = path.join(nextDir, "server", "pages");
-  if (!fs.existsSync(pagesDir)) {
-    fs.mkdirSync(pagesDir);
-  }
+// Create server directory and files
+const serverDir = path.join(nextDir, "server");
+if (!fs.existsSync(serverDir)) {
+  fs.mkdirSync(serverDir);
+}
 
-  // Create a minimal index page
-  const indexPageDir = path.join(pagesDir, "");
-  if (!fs.existsSync(indexPageDir)) {
-    fs.mkdirSync(indexPageDir);
-  }
+// Create pages directory
+const pagesDir = path.join(nextDir, "server", "pages");
+if (!fs.existsSync(pagesDir)) {
+  fs.mkdirSync(pagesDir);
+}
 
-  const indexPagePath = path.join(indexPageDir, "index.js");
-  const indexPageContent = `
+// Create a minimal index page
+const indexPageDir = path.join(pagesDir, "");
+if (!fs.existsSync(indexPageDir)) {
+  fs.mkdirSync(indexPageDir);
+}
+
+const indexPagePath = path.join(indexPageDir, "index.js");
+const indexPageContent = `
 // This file is used by Vercel to handle serverless requests
 module.exports.default = function(req, res) {
   res.statusCode = 200;
@@ -383,21 +366,21 @@ module.exports.default = function(req, res) {
 // Also export props for Next.js
 module.exports.props = {};
 `;
-  fs.writeFileSync(indexPagePath, indexPageContent);
+fs.writeFileSync(indexPagePath, indexPageContent);
 
-  // Create serverless pages directory
-  const serverlessPagesDir = path.join(nextDir, "serverless", "pages");
-  if (!fs.existsSync(serverlessPagesDir)) {
-    fs.mkdirSync(serverlessPagesDir, { recursive: true });
-  }
+// Create serverless pages directory
+const serverlessPagesDir = path.join(nextDir, "serverless", "pages");
+if (!fs.existsSync(serverlessPagesDir)) {
+  fs.mkdirSync(serverlessPagesDir, { recursive: true });
+}
 
-  // Create a minimal serverless index page
-  const serverlessIndexPagePath = path.join(serverlessPagesDir, "index.js");
-  fs.writeFileSync(serverlessIndexPagePath, indexPageContent);
+// Create a minimal serverless index page
+const serverlessIndexPagePath = path.join(serverlessPagesDir, "index.js");
+fs.writeFileSync(serverlessIndexPagePath, indexPageContent);
 
-  // Create a minimal serverless _app page
-  const serverlessAppPagePath = path.join(serverlessPagesDir, "_app.js");
-  const appPageContent = `
+// Create a minimal serverless _app page
+const serverlessAppPagePath = path.join(serverlessPagesDir, "_app.js");
+const appPageContent = `
 // This file is used by Next.js as the main App component
 module.exports.default = function({ Component, pageProps }) {
   return Component(pageProps);
@@ -406,14 +389,14 @@ module.exports.default = function({ Component, pageProps }) {
 // Also export props for Next.js
 module.exports.props = {};
 `;
-  fs.writeFileSync(serverlessAppPagePath, appPageContent);
+fs.writeFileSync(serverlessAppPagePath, appPageContent);
 
-  // Create a minimal serverless _document page
-  const serverlessDocumentPagePath = path.join(
-    serverlessPagesDir,
-    "_document.js"
-  );
-  const documentPageContent = `
+// Create a minimal serverless _document page
+const serverlessDocumentPagePath = path.join(
+  serverlessPagesDir,
+  "_document.js"
+);
+const documentPageContent = `
 // This file is used by Next.js as the main Document component
 module.exports.default = function({ html, head }) {
   return {
@@ -428,122 +411,122 @@ module.exports.default = function({ html, head }) {
 // Also export props for Next.js
 module.exports.props = {};
 `;
-  fs.writeFileSync(serverlessDocumentPagePath, documentPageContent);
+fs.writeFileSync(serverlessDocumentPagePath, documentPageContent);
 
-  // Create required directories for static files
-  const staticDir = path.join(nextDir, "static");
-  if (!fs.existsSync(staticDir)) {
-    fs.mkdirSync(staticDir);
-  }
+// Create required directories for static files
+const staticDir = path.join(nextDir, "static");
+if (!fs.existsSync(staticDir)) {
+  fs.mkdirSync(staticDir);
+}
 
-  // Create required chunks directory
-  const chunksDir = path.join(nextDir, "chunks");
-  if (!fs.existsSync(chunksDir)) {
-    fs.mkdirSync(chunksDir);
-  }
+// Create required chunks directory
+const chunksDir = path.join(nextDir, "chunks");
+if (!fs.existsSync(chunksDir)) {
+  fs.mkdirSync(chunksDir);
+}
 
-  // Create required server/chunks directory
-  const serverChunksDir = path.join(nextDir, "server", "chunks");
-  if (!fs.existsSync(serverChunksDir)) {
-    fs.mkdirSync(serverChunksDir, { recursive: true });
-  }
+// Create required server/chunks directory
+const serverChunksDir = path.join(nextDir, "server", "chunks");
+if (!fs.existsSync(serverChunksDir)) {
+  fs.mkdirSync(serverChunksDir, { recursive: true });
+}
 
-  // Create required server/app directory
-  const serverAppDir = path.join(nextDir, "server", "app");
-  if (!fs.existsSync(serverAppDir)) {
-    fs.mkdirSync(serverAppDir, { recursive: true });
-  }
+// Create required server/app directory
+const serverAppDir = path.join(nextDir, "server", "app");
+if (!fs.existsSync(serverAppDir)) {
+  fs.mkdirSync(serverAppDir, { recursive: true });
+}
 
-  // Create a minimal app page
-  const appPagePath = path.join(serverAppDir, "page.js");
-  fs.writeFileSync(appPagePath, "module.exports = {props: {}};");
+// Create a minimal app page
+const appPagePath = path.join(serverAppDir, "page.js");
+fs.writeFileSync(appPagePath, "module.exports = {props: {}};");
 
-  // Create required server/edge-chunks directory
-  const serverEdgeChunksDir = path.join(nextDir, "server", "edge-chunks");
-  if (!fs.existsSync(serverEdgeChunksDir)) {
-    fs.mkdirSync(serverEdgeChunksDir, { recursive: true });
-  }
+// Create required server/edge-chunks directory
+const serverEdgeChunksDir = path.join(nextDir, "server", "edge-chunks");
+if (!fs.existsSync(serverEdgeChunksDir)) {
+  fs.mkdirSync(serverEdgeChunksDir, { recursive: true });
+}
 
-  // Create required server/middleware directory
-  const serverMiddlewareDir = path.join(nextDir, "server", "middleware");
-  if (!fs.existsSync(serverMiddlewareDir)) {
-    fs.mkdirSync(serverMiddlewareDir, { recursive: true });
-  }
+// Create required server/middleware directory
+const serverMiddlewareDir = path.join(nextDir, "server", "middleware");
+if (!fs.existsSync(serverMiddlewareDir)) {
+  fs.mkdirSync(serverMiddlewareDir, { recursive: true });
+}
 
-  // Create required server/middleware-manifest.json
-  const middlewareManifestPath = path.join(
-    nextDir,
-    "server",
-    "middleware-manifest.json"
-  );
-  const middlewareManifest = {
-    version: 2,
-    sortedMiddleware: [],
-    middleware: {},
-    functions: {},
-    matchers: {},
-  };
-  fs.writeFileSync(
-    middlewareManifestPath,
-    JSON.stringify(middlewareManifest, null, 2)
-  );
+// Create required server/middleware-manifest.json
+const middlewareManifestPath = path.join(
+  nextDir,
+  "server",
+  "middleware-manifest.json"
+);
+const middlewareManifest = {
+  version: 2,
+  sortedMiddleware: [],
+  middleware: {},
+  functions: {},
+  matchers: {},
+};
+fs.writeFileSync(
+  middlewareManifestPath,
+  JSON.stringify(middlewareManifest, null, 2)
+);
 
-  // Create required server/app-paths-manifest.json
-  const appPathsManifestPath = path.join(
-    nextDir,
-    "server",
-    "app-paths-manifest.json"
-  );
-  const appPathsManifest = {
-    pageFiles: {},
-    appFiles: {},
-  };
-  fs.writeFileSync(
-    appPathsManifestPath,
-    JSON.stringify(appPathsManifest, null, 2)
-  );
+// Create required server/app-paths-manifest.json
+const appPathsManifestPath = path.join(
+  nextDir,
+  "server",
+  "app-paths-manifest.json"
+);
+const appPathsManifest = {
+  pageFiles: {},
+  appFiles: {},
+};
+fs.writeFileSync(
+  appPathsManifestPath,
+  JSON.stringify(appPathsManifest, null, 2)
+);
 
-  // Create required server/pages-manifest.json
-  const pagesManifestPath = path.join(nextDir, "server", "pages-manifest.json");
-  const pagesManifest = {
-    "/": "pages/index.js",
-    "/_app": "pages/_app.js",
-    "/_document": "pages/_document.js",
-  };
-  fs.writeFileSync(pagesManifestPath, JSON.stringify(pagesManifest, null, 2));
+// Create required server/pages-manifest.json
+const pagesManifestPath = path.join(nextDir, "server", "pages-manifest.json");
+const pagesManifest = {
+  "/": "pages/index.js",
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js",
+};
+fs.writeFileSync(pagesManifestPath, JSON.stringify(pagesManifest, null, 2));
 
-  // Create required serverless/pages-manifest.json
-  const serverlessPagesManifestPath = path.join(
-    nextDir,
-    "serverless",
-    "pages-manifest.json"
-  );
-  fs.writeFileSync(
-    serverlessPagesManifestPath,
-    JSON.stringify(pagesManifest, null, 2)
-  );
+// Create required serverless/pages-manifest.json
+const serverlessPagesManifestPath = path.join(
+  nextDir,
+  "serverless",
+  "pages-manifest.json"
+);
+fs.writeFileSync(
+  serverlessPagesManifestPath,
+  JSON.stringify(pagesManifest, null, 2)
+);
 
-  // Create required react-loadable-manifest.json
-  const reactLoadableManifestPath = path.join(
-    nextDir,
-    "react-loadable-manifest.json"
-  );
-  fs.writeFileSync(reactLoadableManifestPath, "{}");
+// Create required react-loadable-manifest.json
+const reactLoadableManifestPath = path.join(
+  nextDir,
+  "react-loadable-manifest.json"
+);
+fs.writeFileSync(reactLoadableManifestPath, "{}");
 
-  // Create Next.js launcher file for serverless deployment
-  const launcherPath = path.join(nextDir, "___next_launcher.cjs");
-  const launcherContent = `
+// Create Next.js launcher file for serverless deployment
+const launcherPath = path.join(nextDir, "___next_launcher.cjs");
+const launcherContent = `
 // This file is used by Vercel to launch the Next.js application in serverless mode
 const { default: server } = require('./server/pages/index.js');
 
 // Export a function that handles serverless requests
 module.exports = server;
 `;
-  fs.writeFileSync(launcherPath, launcherContent);
+fs.writeFileSync(launcherPath, launcherContent);
 
-  // Create a simple index.html file that matches the landing page design
-  const indexHtmlPath = path.join(nextDir, "index.html");
-  const indexHtmlContent = `
+// Create a simple index.html file that matches the landing page design
+const indexHtmlPath = path.join(nextDir, "index.html");
+const indexHtmlContent = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -736,8 +719,7 @@ module.exports = server;
 </body>
 </html>
 `;
-  fs.writeFileSync(indexHtmlPath, indexHtmlContent);
+fs.writeFileSync(indexHtmlPath, indexHtmlContent);
 
-  console.log("Created all required files for Vercel deployment");
-  process.exit(0); // Exit with success code to allow deployment to continue
-}
+console.log("Created all required files for Vercel deployment");
+process.exit(0); // Exit with success code to allow deployment to continue

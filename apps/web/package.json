@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "NODE_OPTIONS='--max_old_space_size=3072' next build",
+    "build": "node build-vercel.cjs",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"

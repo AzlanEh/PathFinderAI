@@ -35,9 +35,7 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    serverExternalPackages: ["@prisma/client"],
-  },
+  // No experimental options needed for our fallback page
 };
 
 export default nextConfig;
