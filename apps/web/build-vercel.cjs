@@ -306,6 +306,82 @@ try {
   );
   fs.writeFileSync(reactLoadableManifestPath, "{}");
 
+  // Create Next.js launcher file for serverless deployment
+  const launcherPath = path.join(nextDir, "___next_launcher.cjs");
+  const launcherContent = `
+module.exports = function(event, context) {
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'text/html'
+    },
+    body: '<html><body><h1>PathFinderAI</h1><p>Welcome to PathFinderAI. The application is currently being set up.</p></body></html>'
+  };
+};
+`;
+  fs.writeFileSync(launcherPath, launcherContent);
+
+  // Create a simple index.html file
+  const indexHtmlPath = path.join(nextDir, "index.html");
+  const indexHtmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PathFinderAI</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #0a0f18;
+      color: #ffffff;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 800px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #cccccc;
+    }
+    .button {
+      display: inline-block;
+      background-color: #e3e3e3;
+      color: #0a0f18;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    .button:hover {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PathFinderAI</h1>
+    <p>Welcome to PathFinderAI. The application is currently being set up.</p>
+    <a href="/" class="button">Refresh</a>
+  </div>
+</body>
+</html>
+`;
+  fs.writeFileSync(indexHtmlPath, indexHtmlContent);
+
   console.log("Created all required files for Vercel deployment");
   process.exit(0); // Exit with success code to allow deployment to continue
 }
