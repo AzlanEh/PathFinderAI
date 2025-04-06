@@ -1,13 +1,11 @@
 import React from "react";
-import { NavbarDemo } from "../components/navbar.tsx";
-import { BackgroundBeams } from "../components/ui/background-beams.tsx";
-import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button.tsx";
-import { BackgroundLines } from "../components/ui/background-lines.tsx";
-import { GoogleGeminiEffectDemo } from "../components/google-gemini-effect.tsx";
-import { AnimatedBeamDemo } from "../components/animated-beam-bidirectional.tsx";
-import { FeaturesSectionDemo } from "../components/featureSection.tsx";
-
-import Link from "next/link";
+import { CombinedNavbar } from "../components/combined-navbar";
+import { BackgroundBeams } from "../components/ui/background-beams";
+import { InteractiveHoverButton } from "../components/magicui/interactive-hover-button";
+import { BackgroundLines } from "../components/ui/background-lines";
+import { GoogleGeminiEffectDemo } from "../components/google-gemini-effect";
+import { AnimatedBeamDemo } from "../components/animated-beam-bidirectional";
+import { FeaturesSectionDemo } from "../components/featureSection";
 
 export default function Home() {
 	return (
@@ -19,24 +17,7 @@ export default function Home() {
 				</div>
 
 				{/* Navbar Section */}
-				<div className="flex justify-between items-center relative z-50 px-4 py-4">
-					<div className="w-32 rounded-3xl h-14 bg-[#e3e3e3] flex items-center justify-center font-Yatra">
-						<div className="text-2xl text-[#35425a]">
-							<p>Knowster</p>
-						</div>
-					</div>
-
-					<div className="flex-1 flex justify-center z-50">
-						<NavbarDemo />
-					</div>
-
-					<Link
-						href="/"
-						className="px-4 py-2 rounded-full bg-[#131316] text-white text-sm font-semibold"
-					>
-						<InteractiveHoverButton>Join Now</InteractiveHoverButton>
-					</Link>
-				</div>
+				<CombinedNavbar />
 
 				{/* Middle section */}
 				<div className="flex flex-col items-center justify-center h-[70vh] mt-8">
@@ -50,7 +31,9 @@ export default function Home() {
 						</p>
 
 						<div className="relative z-40 mt-6">
-							<InteractiveHoverButton>Get Started</InteractiveHoverButton>
+							<a href="/courses" className="rounded-full px-6 py-3 bg-[#e3e3e3] text-[#0a0f18] font-medium hover:bg-opacity-90">
+								Get Started
+							</a>
 						</div>
 					</BackgroundLines>
 				</div>

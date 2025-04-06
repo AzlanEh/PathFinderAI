@@ -63,8 +63,8 @@ export const Grid = ({ size }: { size?: number }) => {
         <GridPattern
           width={size ?? 24}
           height={size ?? 24}
-          x="-12"
-          y="4"
+          x={-12}
+          y={4}
           className="absolute inset-0 h-full w-full fill-[#1a202c] stroke-[#1a202c]/50"
         />
       </div>
@@ -72,7 +72,14 @@ export const Grid = ({ size }: { size?: number }) => {
   );
 };
 
-export function GridPattern({ width, height, x, y, ...props }: any) {
+interface GridPatternProps extends React.SVGProps<SVGSVGElement> {
+  width: number;
+  height: number;
+  x?: number;
+  y?: number;
+}
+
+export function GridPattern({ width, height, x, y, ...props }: GridPatternProps) {
   const patternId = useId();
   const squares = [
     [3, 1],
@@ -101,14 +108,14 @@ export function GridPattern({ width, height, x, y, ...props }: any) {
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill={`url(#${patternId})`} />
-      <svg x={x} y={y} className="overflow-visible">
+      <svg x={x} y={y} className="overflow-visible" aria-hidden="true">
         {squares.map(([x, y]) => (
           <rect
             key={`${x}-${y}`}
             width={width + 1}
             height={height + 1}
-            x={x * width}
-            y={y * height}
+            x={(x || 0) * width}
+            y={(y || 0) * height}
             fill="none"
             strokeWidth="2"
           />

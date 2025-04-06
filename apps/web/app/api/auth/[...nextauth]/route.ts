@@ -1,10 +1,24 @@
 import NextAuth from "next-auth";
 import client from "@repo/db/client";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-// import prisma from "../../../../../server/db/prismaDB.js";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { User } from "next-auth";
+
+// Extend the User type to include role
+declare module "next-auth" {
+  interface User {
+    role?: string;
+  }
+}
+
+// Extend the JWT token type
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: string;
+  }
+}
 
 const handler = NextAuth({
   adapter: PrismaAdapter(client),

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { RefreshCw, Send, Paperclip, Image, Sparkles } from "lucide-react";
-import SideNavbar from "../../component/sideNav";
+import SideNavbar from "../../../components/sideNav";
 
 const COMMON_PROMPTS = [
 	"Write a to-do list for a personal project or task",
@@ -167,7 +167,7 @@ export default function EduAi() {
 							<div
 								key={message.id}
 								className={`
-                  p-4 rounded-lg max-w-3xl 
+                  p-4 rounded-lg max-w-3xl
                   transition-all duration-300 ease-in-out
                   ${
 										message.type === "user"
@@ -211,16 +211,16 @@ export default function EduAi() {
 										key={prompt}
 										onClick={() => handlePromptSelect(prompt)}
 										className="
-                      p-3 
-                      bg-white 
-                      rounded-lg 
-                      border 
-                      border-gray-200 
-                      hover:border-purple-500 
-                      hover:shadow-md 
-                      transition-all 
-                      duration-200 
-                      text-left 
+                      p-3
+                      bg-white
+                      rounded-lg
+                      border
+                      border-gray-200
+                      hover:border-purple-500
+                      hover:shadow-md
+                      transition-all
+                      duration-200
+                      text-left
                       flex
                       items-start
                       gap-3
@@ -238,12 +238,12 @@ export default function EduAi() {
 							<button
 								onClick={handleRefreshPrompts}
 								className="
-                  text-gray-600 
-                  hover:text-purple-600 
-                  flex 
-                  items-center 
-                  text-sm 
-                  transition-colors 
+                  text-gray-600
+                  hover:text-purple-600
+                  flex
+                  items-center
+                  text-sm
+                  transition-colors
                   duration-200
                 "
 							>
@@ -264,17 +264,17 @@ export default function EduAi() {
 								maxLength={1000}
 								className="
                   w-full
-                  p-3 
-                  pr-24 
-                  rounded-lg 
-                  border 
-                  border-gray-300 
-                  focus:border-purple-500 
-                  focus:ring-1 
-                  focus:ring-purple-200 
-                  outline-none 
+                  p-3
+                  pr-24
+                  rounded-lg
+                  border
+                  border-gray-300
+                  focus:border-purple-500
+                  focus:ring-1
+                  focus:ring-purple-200
+                  outline-none
                   text-sm md:text-base
-                  transition-all 
+                  transition-all
                   duration-200
                   placeholder-gray-400
                 "
@@ -295,8 +295,8 @@ export default function EduAi() {
                     p-2
                     bg-purple-600
                     hover:bg-purple-700
-                    rounded-lg 
-                    transition-colors 
+                    rounded-lg
+                    transition-colors
                     duration-200
                     disabled:opacity-50
                     disabled:cursor-not-allowed
@@ -315,7 +315,7 @@ export default function EduAi() {
 								<button
 									onClick={() => setAddAttachment(!addAttachment)}
 									className={`
-                    flex items-center gap-2 text-sm 
+                    flex items-center gap-2 text-sm
                     ${addAttachment ? "text-purple-600" : "text-gray-500"}
                     hover:text-purple-600 transition-colors duration-200
                   `}
@@ -327,7 +327,7 @@ export default function EduAi() {
 								<button
 									onClick={() => setUseImage(!useImage)}
 									className={`
-                    flex items-center gap-2 text-sm 
+                    flex items-center gap-2 text-sm
                     ${useImage ? "text-purple-600" : "text-gray-500"}
                     hover:text-purple-600 transition-colors duration-200
                   `}
