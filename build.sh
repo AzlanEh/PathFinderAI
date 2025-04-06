@@ -11,4 +11,5 @@ cd ../..
 
 # Build the web app
 cd apps/web
+npm install --no-save typescript @types/react @types/node
 npm run build
