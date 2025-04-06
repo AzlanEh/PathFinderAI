@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "node build-vercel.cjs",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"
