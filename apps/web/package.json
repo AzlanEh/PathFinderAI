@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "next build",
+    "build": "cd ../../packages/db && npx prisma generate && cd ../../apps/web && next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"
