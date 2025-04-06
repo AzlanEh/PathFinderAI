@@ -1,19 +1,7 @@
 {
-  "buildCommand": "cd packages/db && npx prisma generate && cd ../../apps/web && npm run build",
+  "buildCommand": "./build.sh",
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next",
-  "devCommand": "npm run dev",
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "apps/web/$1"
-    }
-  ]
+  "devCommand": "npm run dev"
 }
