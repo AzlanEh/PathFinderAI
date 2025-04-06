@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack --port 3000",
-    "build": "node build-vercel.cjs",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "check-types": "tsc --noEmit"
@@ -42,7 +42,9 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "19.0.4",
     "eslint": "^9.24.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32"
   },
   "resolutions": {
     "@types/node": "^22.14.0",

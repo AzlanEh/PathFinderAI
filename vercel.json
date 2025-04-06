@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd packages/db && npx prisma generate && cd ../../apps/web && npm run build",
+  "buildCommand": "cd packages/db && npx prisma generate && cd ../../apps/web && npm install --no-save typescript@5.8.2 @types/react@19.0.10 @types/node@22.14.0 tailwindcss@4.0.17 postcss@8.4.32 autoprefixer@10.4.16 && npm run build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next",

@@ -35,6 +35,11 @@ const nextConfig = {
     };
     return config;
   },
+  experimental: {
+    serverComponentsExternalPackages: ["@prisma/client"],
+  },
+  // Ensure that Next.js uses SWC for compilation
+  swcMinify: true,
 };
 
 export default nextConfig;
