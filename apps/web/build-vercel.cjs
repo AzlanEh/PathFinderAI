@@ -183,7 +183,18 @@ try {
   }
 
   const indexPagePath = path.join(indexPageDir, "index.js");
-  fs.writeFileSync(indexPagePath, "module.exports = {props: {}};");
+  const indexPageContent = `
+// This file is used by Vercel to handle serverless requests
+module.exports.default = function(req, res) {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/html');
+  res.end('<html><body><h1>PathFinderAI</h1><p>Welcome to PathFinderAI. The application is currently being set up.</p></body></html>');
+};
+
+// Also export props for Next.js
+module.exports.props = {};
+`;
+  fs.writeFileSync(indexPagePath, indexPageContent);
 
   // Create serverless pages directory
   const serverlessPagesDir = path.join(nextDir, "serverless", "pages");
@@ -193,18 +204,42 @@ try {
 
   // Create a minimal serverless index page
   const serverlessIndexPagePath = path.join(serverlessPagesDir, "index.js");
-  fs.writeFileSync(serverlessIndexPagePath, "module.exports = {props: {}};");
+  fs.writeFileSync(serverlessIndexPagePath, indexPageContent);
 
   // Create a minimal serverless _app page
   const serverlessAppPagePath = path.join(serverlessPagesDir, "_app.js");
-  fs.writeFileSync(serverlessAppPagePath, "module.exports = {props: {}};");
+  const appPageContent = `
+// This file is used by Next.js as the main App component
+module.exports.default = function({ Component, pageProps }) {
+  return Component(pageProps);
+};
+
+// Also export props for Next.js
+module.exports.props = {};
+`;
+  fs.writeFileSync(serverlessAppPagePath, appPageContent);
 
   // Create a minimal serverless _document page
   const serverlessDocumentPagePath = path.join(
     serverlessPagesDir,
     "_document.js"
   );
-  fs.writeFileSync(serverlessDocumentPagePath, "module.exports = {props: {}};");
+  const documentPageContent = `
+// This file is used by Next.js as the main Document component
+module.exports.default = function({ html, head }) {
+  return {
+    props: {
+      html: html || '',
+      head: head || [],
+      styles: []
+    }
+  };
+};
+
+// Also export props for Next.js
+module.exports.props = {};
+`;
+  fs.writeFileSync(serverlessDocumentPagePath, documentPageContent);
 
   // Create required directories for static files
   const staticDir = path.join(nextDir, "static");
@@ -309,15 +344,11 @@ try {
   // Create Next.js launcher file for serverless deployment
   const launcherPath = path.join(nextDir, "___next_launcher.cjs");
   const launcherContent = `
-module.exports = function(event, context) {
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'text/html'
-    },
-    body: '<html><body><h1>PathFinderAI</h1><p>Welcome to PathFinderAI. The application is currently being set up.</p></body></html>'
-  };
-};
+// This file is used by Vercel to launch the Next.js application in serverless mode
+const { default: server } = require('./server/pages/index.js');
+
+// Export a function that handles serverless requests
+module.exports = server;
 `;
   fs.writeFileSync(launcherPath, launcherContent);
 
