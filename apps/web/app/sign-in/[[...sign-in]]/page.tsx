@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "../../../components/ui/button";
 import dynamic from "next/dynamic";
 
 const BackgroundBeams = dynamic(
 	() =>
-		import("@/components/ui/background-beams").then(
+		import("../../../components/ui/background-beams").then(
 			(mod) => mod.BackgroundBeams,
 		),
 	{ ssr: false },

@@ -12,6 +12,13 @@ const nextConfig = {
   },
   transpilePackages: ["@repo/ui"],
   output: "standalone",
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": require("node:path").resolve(__dirname, "./"),
+    };
+    return config;
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
